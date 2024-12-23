@@ -410,6 +410,25 @@ def read_log():
     return log_file_path.read_text()
 
 
+def get_user_info(prompt, strip_response=True):
+    """Ask the user for some information.
+
+    If you want to preserve whitespace, pass strip_response=False.
+
+    The main benefit to using this function is consistent logging.
+    Returns:
+    - Str: User's response, after calling strip().
+    """
+    log_info(prompt)
+    response = input(prompt)
+    log_info(response)
+
+    if strip_response:
+        return response.strip()
+    else:
+        return response
+
+
 # --- Helper functions ---
 
 
