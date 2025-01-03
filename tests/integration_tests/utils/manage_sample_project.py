@@ -198,31 +198,7 @@ def reset_test_project(tmp_dir, pkg_manager):
 
     # Reset to the initial state of the temp project instance.
     subprocess.run(["git", "reset", "--hard", "INITIAL_STATE"])
-
-    # Remove any files that may remain from the last run of simple_deploy.
-    files_dirs_to_remove = [
-        # Fly.io
-        "fly.toml",
-        "Dockerfile",
-        ".dockerignore",
-        # Platform.sh
-        ".platform.app.yaml",
-        ".platform",
-        # Heroku
-        "Procfile",
-        "static",
-        # All platforms.
-        "simple_deploy_logs",
-        "__pycache__",
-        "poetry.lock",
-    ]
-
-    for entry in files_dirs_to_remove:
-        entry_path = Path(tmp_dir) / entry
-        if entry_path.is_file():
-            entry_path.unlink()
-        elif entry_path.is_dir():
-            rmtree(entry_path)
+    subprocess.run(["git", "clean", "-fd"])
 
     # Remove dependency management files not needed for this package manager
     if pkg_manager == "req_txt":
