@@ -6,6 +6,18 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 0.9 - Simplified usage
 ---
 
+### 0.9.2
+
+#### External changes
+
+- N/A
+
+#### Internal changes
+
+- New plugin utility function, `get_user_info()`. Useful for prompting the user for information such as a deployed project name.
+- New plugin utility function, `read_log()`, for getting contents of the simple deploy log for the current run.
+- Simpler and more effective approach to resetting the test project during integration testing.
+
 ### 0.9.1
 
 #### External changes
