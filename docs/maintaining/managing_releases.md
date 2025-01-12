@@ -15,7 +15,7 @@ If this release will impact the functionality of current plugins, make sure to e
 Making a new release
 ---
 
-- Make sure you're on the main branch, and you've' pulled all recently merged changes: `git pull origin main`
+- Make sure you're on the main branch, and you've pulled all recently merged changes: `git pull origin main`
 - Bump the version number in `pyproject.toml`
 - Make an entry in `changelog.md`
 - Commit this change: `git commit -am "Bumped version number, and updated changelog."`
