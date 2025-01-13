@@ -10,9 +10,8 @@ Plugins are critical to the functioning of this project. Plugins don't just exte
 
 ## Developing a new plugin
 
-I'm aiming to make a repo that will serve as a template for starting a new plugin. Until then, the best approach is to copy what you see in the [dsd-flyio](https://github.com/django-simple-deploy/dsd-flyio) plugin. If you're interested in developing a new plugin and want some help, please feel free to open an issue.
+If you want to write a plugin, see the notes in the [dsd-plugin-template](https://github.com/django-simple-deploy/dsd-plugin-template) repository. You can download (not clone) that repo, and you'll have a working plugin that you can adapt to the platform you're focusing on. If you're interested in developing a new plugin and want some help, please feel free to open an issue.
 
-- Start by downloading the `dsd-plugin-template` repo, and follow instructions in the README. This will give you a working plugin, which you can customize for your platform.
 
 ## Testing plugins
 
