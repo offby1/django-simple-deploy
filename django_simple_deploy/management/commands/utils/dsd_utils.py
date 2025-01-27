@@ -11,7 +11,7 @@ from importlib.metadata import packages_distributions
 from django.template.engine import Engine, Context
 from django.template.utils import get_app_template_dirs
 
-from .command_errors import SimpleDeployCommandError
+from .command_errors import DSDCommandError
 
 import toml
 
@@ -106,7 +106,7 @@ def check_status_output(status_output, diff_output):
     """Check output of `git status --porcelain` for uncommitted changes.
 
     Look for:
-        Untracked changes other than simple_deploy_logs/
+        Untracked changes other than dsd_logs/
         Modified files beyond .gitignore and settings.py
     Consider looking at other status codes at some point.
 
@@ -121,10 +121,7 @@ def check_status_output(status_output, diff_output):
 
     if len(untracked_changes) > 1:
         return False
-    if (
-        len(untracked_changes) == 1
-        and "simple_deploy_logs/" not in untracked_changes[0]
-    ):
+    if len(untracked_changes) == 1 and "dsd_logs/" not in untracked_changes[0]:
         return False
 
     # Process modified files.
@@ -195,7 +192,7 @@ def _check_gitignore_diff(diff_lines):
         return False
 
     # If the change is not adding simple_deploy, don't proceed.
-    if "simple_deploy_logs" not in lines[0]:
+    if "dsd_logs" not in lines[0]:
         return False
 
     return True
@@ -237,7 +234,7 @@ def _get_plugin_name_from_packages(available_packages):
         msg += "\n  $ pip install dsd-flyio"
         msg += "\nPlease install the plugin for the platform you want to deploy to,"
         msg += "\nand then run the deploy command again."
-        raise SimpleDeployCommandError(msg)
+        raise DSDCommandError(msg)
 
     if len(plugin_names) == 1:
         return plugin_names[0]
@@ -246,4 +243,4 @@ def _get_plugin_name_from_packages(available_packages):
     msg = f"There seem to be multiple plugins installed."
     msg += "\nPlease uninstall plugins, keeping only the one you want to use for deployment."
     msg += "\nFuture releases of simple_deploy may allow you to select which plugin to use."
-    raise SimpleDeployCommandError(msg)
+    raise DSDCommandError(msg)

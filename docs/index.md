@@ -12,7 +12,7 @@ Here's what automated deployment on [Fly.io](https://fly.io) looks like:
 
 ```sh
 $ pip install django-simple-deploy[fly_io]
-# Add simple_deploy to INSTALLED_APPS.
+# Add django_simple_deploy to INSTALLED_APPS.
 $ python manage.py deploy --automate-all
 ```
 
@@ -25,6 +25,8 @@ For help deploying to a specific platform, start here:
 - [Deploying to Fly.io](quick_starts/quick_start_flyio.md)
 - [Deploying to Platform.sh](quick_starts/quick_start_platformsh.md)
 - [Deploying to Heroku](quick_starts/quick_start_heroku.md)
+
+For other deployment options, see the list of [available plugins](plugins/available_plugins.md).
 
 ## More resources
 

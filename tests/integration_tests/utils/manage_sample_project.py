@@ -6,7 +6,7 @@ from pathlib import Path
 from shutil import copytree, rmtree
 from shlex import split
 
-from simple_deploy.management.commands.utils import sd_utils
+from django_simple_deploy.management.commands.utils import dsd_utils
 
 import pytest
 
@@ -16,9 +16,9 @@ def setup_project(tmp_proj_dir, sd_root_dir, config):
     - Copy the sample project to a temp dir.
     - Set up a venv.
     - Install requirements for the sample project.
-    - Install the local, editable version of simple_deploy.
+    - Install the local, editable version of django-simple-deploy.
     - Make an initial commit.
-    - Add simple_deploy to INSTALLED_APPS.
+    - Add django_simple_deploy to INSTALLED_APPS.
 
     Returns:
     - None
@@ -81,7 +81,7 @@ def setup_project(tmp_proj_dir, sd_root_dir, config):
             ]
         )
 
-    # Install the local version of simple_deploy (the version we're testing).
+    # Install the local version of django-simple-deploy (the version we're testing).
     # An editable install is preferred for two reasons. It's much faster than a non-editable
     # install. It also makes the temp test project *really* useful for debugging, and even
     # development. You can run a test, maybe `pytest -x`, drop into the temp project and
@@ -130,7 +130,7 @@ def setup_project(tmp_proj_dir, sd_root_dir, config):
     #   Better: install whatever plugin is installed locally.
     plugin = config.option.plugin
     if config.option.plugin is None:
-        plugin = sd_utils.get_plugin_name()
+        plugin = dsd_utils.get_plugin_name()
         print("plugin", plugin)
         # breakpoint()
         # pytest.exit()
@@ -180,11 +180,11 @@ def setup_project(tmp_proj_dir, sd_root_dir, config):
     subprocess.run([git_exe, "commit", "-am", "Initial commit."])
     subprocess.run([git_exe, "tag", "-am", "", "INITIAL_STATE"])
 
-    # Add simple_deploy to INSTALLED_APPS.
+    # Add django_simple_deploy to INSTALLED_APPS.
     settings_file_path = tmp_proj_dir / "blog/settings.py"
     settings_content = settings_file_path.read_text()
     new_settings_content = settings_content.replace(
-        "# Third party apps.", '# Third party apps.\n    "simple_deploy",'
+        "# Third party apps.", '# Third party apps.\n    "django_simple_deploy",'
     )
     settings_file_path.write_text(new_settings_content)
 
@@ -217,20 +217,22 @@ def reset_test_project(tmp_dir, pkg_manager):
         ["git", "commit", "-am", "Removed unneeded dependency management files."]
     )
 
-    # Add simple_deploy to INSTALLED_APPS.
+    # Add django_simple_deploy to INSTALLED_APPS.
     settings_file_path = tmp_dir / "blog/settings.py"
     settings_content = settings_file_path.read_text()
     new_settings_content = settings_content.replace(
-        "# Third party apps.", '# Third party apps.\n    "simple_deploy",'
+        "# Third party apps.", '# Third party apps.\n    "django_simple_deploy",'
     )
     settings_file_path.write_text(new_settings_content)
 
     # Make sure we have a clean status before calling deploy.
-    subprocess.run(["git", "commit", "-am", "Added simple_deploy to INSTALLED_APPS."])
+    subprocess.run(
+        ["git", "commit", "-am", "Added django_simple_deploy to INSTALLED_APPS."]
+    )
 
 
-def call_simple_deploy(tmp_dir, sd_command, platform=None):
-    """Make a call to deploy, using the arguments passed in sd_command.
+def call_deploy(tmp_dir, dsd_command, platform=None):
+    """Make a call to deploy, using the arguments passed in dsd_command.
 
     Returns:
     - stdout, stderr
@@ -242,7 +244,7 @@ def call_simple_deploy(tmp_dir, sd_command, platform=None):
     os.chdir(tmp_dir)
 
     # Add --unit-testing argument to the call.
-    sd_command = sd_command.replace("deploy", "deploy --unit-testing")
+    dsd_command = dsd_command.replace("deploy", "deploy --unit-testing")
 
     # Add options that are present.
     # - If we're testing for a platform, add that platform option.
@@ -255,10 +257,10 @@ def call_simple_deploy(tmp_dir, sd_command, platform=None):
     # DEV: This will probably not be hard-coded once third-party plugins are being
     # written.
     if platform:
-        sd_command = f"{sd_command}"
+        dsd_command = f"{dsd_command}"
     if platform in ("fly_io", "flyio", "platform_sh", "platformsh"):
         # These platforms need a project name to carry out configuration.
-        sd_command = f"{sd_command} --deployed-project-name my_blog_project"
+        dsd_command = f"{dsd_command} --deployed-project-name my_blog_project"
 
     # Get the path to the Python interpreter in the virtual environment.
     #   We'll use the full path to the interpreter, rather than trying to rely on
@@ -268,14 +270,14 @@ def call_simple_deploy(tmp_dir, sd_command, platform=None):
     else:
         python_exe = Path(tmp_dir) / "b_env" / "bin" / "python"
 
-    sd_command = sd_command.replace("python", python_exe.as_posix())
-    print(f"*** sd_command: {sd_command} ***")
+    dsd_command = dsd_command.replace("python", python_exe.as_posix())
+    print(f"*** dsd_command: {dsd_command} ***")
 
     # Make the call to deploy.
     #   The `text=True` argument causes this to return stdout and stderr as strings, not objects.
     #   Some of these commands, such as cwd, are required specifically for Windows.
     sd_call = subprocess.Popen(
-        split(sd_command),
+        split(dsd_command),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,

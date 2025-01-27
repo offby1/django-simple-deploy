@@ -35,8 +35,8 @@ def reset_test_project_function(request, tmp_project):
 
 
 @pytest.fixture(autouse=True)
-def run_simple_deploy():
-    """Overrides main run_simple_deploy() fixture, which is not needed here."""
+def run_dsd():
+    """Overrides main run_dsd() fixture, which is not needed here."""
     return
 
 
@@ -51,8 +51,8 @@ def execute_quick_command(tmp_project, cmd):
 
 
 def add_sd_logs(tmp_project):
-    """Add simple_deploy_logs/ dir, and a dummy log file with a single line."""
-    log_dir = tmp_project / "simple_deploy_logs"
+    """Add dsd_logs/ dir, and a dummy log file with a single line."""
+    log_dir = tmp_project / "dsd_logs"
     assert not log_dir.exists()
     log_dir.mkdir()
 
@@ -61,24 +61,24 @@ def add_sd_logs(tmp_project):
 
 
 def add_sd_logs_gitignore(tmp_project):
-    """Add simple_deploy_logs/ to .gitignore, without committing the change."""
+    """Add dsd_logs/ to .gitignore, without committing the change."""
     path = tmp_project / ".gitignore"
     assert path.exists()
 
-    # simple_deploy_logs/ should not be in .gitignore yet.
+    # dsd_logs/ should not be in .gitignore yet.
     contents = path.read_text()
-    assert "simple_deploy_logs" not in contents
+    assert "dsd_logs" not in contents
 
-    contents += "\nsimple_deploy_logs/\n"
+    contents += "\ndsd_logs/\n"
     path.write_text(contents)
 
 
 def add_sd_installed_apps(tmp_project):
-    """Add simple_deploy to INSTALLED_APPS, as an uncommitted change.
+    """Add django_simple_deploy to INSTALLED_APPS, as an uncommitted change.
 
     Run this before making other changes.
     """
-    # Reset project to INITIAL_STATE, to remove simple_deploy from INSTALLED_APPS.
+    # Reset project to INITIAL_STATE, to remove django_simple_deploy from INSTALLED_APPS.
     cmd = "git reset --hard INITIAL_STATE"
     output_str = execute_quick_command(tmp_project, cmd).stdout.decode()
     assert "HEAD is now at " in output_str
@@ -87,16 +87,16 @@ def add_sd_installed_apps(tmp_project):
     path = tmp_project / "blog" / "settings.py"
     settings_text = path.read_text()
 
-    # 'simple_deploy' should no longer be in settings.
-    assert "simple_deploy" not in settings_text
+    # 'django_simple_deploy' should no longer be in settings.
+    assert "django_simple_deploy" not in settings_text
 
-    # Split settings into lines, and find where to insert 'simple_deploy'.
+    # Split settings into lines, and find where to insert 'django_simple_deploy'.
     settings_lines = settings_text.splitlines()
     for index, line in enumerate(settings_lines):
         if "django_bootstrap5" in line:
             break
 
-    settings_lines.insert(index + 1, '    "simple_deploy",')
+    settings_lines.insert(index + 1, '    "django_simple_deploy",')
     settings_text = "\n".join(settings_lines)
     # Add back the trailing newline that was lost in text processing.
     settings_text += "\n"
@@ -112,25 +112,25 @@ def add_sd_installed_apps(tmp_project):
 
 def test_clean_git_status(tmp_project):
     """Call deploy with the existing clean state of the project."""
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." in stdout
+    assert "No uncommitted changes, other than django-simple-deploy work." in stdout
 
 
 def test_unacceptable_settings_change(tmp_project):
-    """Call deploy after adding a non-simple_deploy line to settings.py."""
+    """Call deploy after adding a non-dsd line to settings.py."""
     path = tmp_project / "blog" / "settings.py"
     settings_text = path.read_text()
     new_text = "\n# Placeholder comment to create unacceptable git status.\n"
     new_settings_text = settings_text + new_text
     path.write_text(new_settings_text)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." not in stdout
-    assert "SimpleDeployCommandError" in stderr
+    assert "No uncommitted changes, other than django-simple-deploy work." not in stdout
+    assert "DSDCommandError" in stderr
 
 
 def test_unacceptable_file_changed(tmp_project):
@@ -141,90 +141,90 @@ def test_unacceptable_file_changed(tmp_project):
     new_wsgi_text = wsgi_text + new_text
     path.write_text(new_wsgi_text)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." not in stdout
-    assert "SimpleDeployCommandError" in stderr
+    assert "No uncommitted changes, other than django-simple-deploy work." not in stdout
+    assert "DSDCommandError" in stderr
 
 
 def test_sdlogs_exists(tmp_project):
-    """Add simple_deploy_logs/ dir, and dummy log file with one line."""
+    """Add dsd_logs/ dir, and dummy log file with one line."""
     add_sd_logs(tmp_project)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." in stdout
+    assert "No uncommitted changes, other than django-simple-deploy work." in stdout
 
 
 def test_add_sdlogs_gitignore(tmp_project):
-    """Add simple_deploy_logs/ to .gitignore."""
+    """Add dsd_logs/ to .gitignore."""
     add_sd_logs_gitignore(tmp_project)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." in stdout
+    assert "No uncommitted changes, other than django-simple-deploy work." in stdout
 
 
 def test_add_sd_installed_apps(tmp_project):
-    """Add simple_deploy to INSTALLED_APPS, as an uncommitted change."""
+    """Add django_simple_deploy to INSTALLED_APPS, as an uncommitted change."""
     add_sd_installed_apps(tmp_project)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." in stdout
+    assert "No uncommitted changes, other than django-simple-deploy work." in stdout
 
 
 # --- Test combinations of two acceptable changes. ---
 
 
 def test_sdlogs_exists_add_sdlogs_gitignore(tmp_project):
-    """Add simple_deploy_logs/ dir, and dummy log file with one line. Also add sdlogs
+    """Add dsd_logs/ dir, and dummy log file with one line. Also add sdlogs
     to .gitignore.
     """
     add_sd_logs(tmp_project)
     add_sd_logs_gitignore(tmp_project)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." in stdout
+    assert "No uncommitted changes, other than django-simple-deploy work." in stdout
 
 
 def test_sdlogs_exists_sd_installed_apps(tmp_project):
-    """Add simple_deploy_logs/ dir, and dummy log file with one line. Also add sd to
+    """Add dsd_logs/ dir, and dummy log file with one line. Also add sd to
     INSTALLED_APPS.
     """
     # Order matters, because adding to INSTALLED_APPS starts by resetting project.
     add_sd_installed_apps(tmp_project)
     add_sd_logs(tmp_project)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." in stdout
+    assert "No uncommitted changes, other than django-simple-deploy work." in stdout
 
 
 def test_sdlogs_gitignore_sd_installed_apps(tmp_project):
-    """Add simple_deploy_logs/ to .gitignore, and  add sd to INSTALLED_APPS."""
+    """Add dsd_logs/ to .gitignore, and  add sd to INSTALLED_APPS."""
     # Order matters, because adding to INSTALLED_APPS starts by resetting project.
     add_sd_installed_apps(tmp_project)
     add_sd_logs_gitignore(tmp_project)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." in stdout
+    assert "No uncommitted changes, other than django-simple-deploy work." in stdout
 
 
 # --- Test combination of all three changes.
 
 
 def test_sdlogs_exists_sdlogs_gitgnore_sd_installed_apps(tmp_project):
-    """Add simple_deploy_logs/ dir and a single log file. Add simple_deploy_logs/ to
+    """Add dsd_logs/ dir and a single log file. Add dsd_logs/ to
     .gitignore, and  add sd to INSTALLED_APPS.
     """
     # Order matters, because adding to INSTALLED_APPS starts by resetting project.
@@ -232,10 +232,10 @@ def test_sdlogs_exists_sdlogs_gitgnore_sd_installed_apps(tmp_project):
     add_sd_logs(tmp_project)
     add_sd_logs_gitignore(tmp_project)
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
-    assert "No uncommitted changes, other than simple_deploy work." in stdout
+    assert "No uncommitted changes, other than django-simple-deploy work." in stdout
 
 
 # --- Tests using --ignore-unclean-git flag. ---
@@ -243,22 +243,22 @@ def test_sdlogs_exists_sdlogs_gitgnore_sd_installed_apps(tmp_project):
 
 def test_clean_git_status_ignore_unclean_flag(tmp_project):
     """Call deploy with the existing clean state of the project."""
-    sd_command = "python manage.py deploy --ignore-unclean-git"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy --ignore-unclean-git"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
     assert "Ignoring git status." in stdout
 
 
 def test_unacceptable_settings_change_ignore_unclean_flag(tmp_project):
-    """Call deploy after adding a non-simple_deploy line to settings.py."""
+    """Call deploy after adding a non-dsd line to settings.py."""
     path = tmp_project / "blog" / "settings.py"
     settings_text = path.read_text()
     new_text = "\n# Placeholder comment to create unacceptable git status."
     new_settings_text = settings_text + new_text
     path.write_text(new_settings_text)
 
-    sd_command = "python manage.py deploy --ignore-unclean-git"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy --ignore-unclean-git"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
     assert "Ignoring git status." in stdout
     # assert "Ignoring git status." not in stdout
@@ -272,7 +272,7 @@ def test_unacceptable_file_changed_ignore_unclean_flag(tmp_project):
     new_wsgi_text = wsgi_text + new_text
     path.write_text(new_wsgi_text)
 
-    sd_command = "python manage.py deploy --ignore-unclean-git"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy --ignore-unclean-git"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
     assert "Ignoring git status." in stdout

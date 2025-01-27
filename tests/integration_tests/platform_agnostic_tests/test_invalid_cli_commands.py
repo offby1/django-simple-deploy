@@ -5,7 +5,7 @@ Each test function makes an invalid call, and then checks that:
 - The user's project is unchanged.
 
 Each test function includes the exact invalid call we expect users might make;
-  the --unit-testing flag is added in the call_simple_deploy() function.
+  the --unit-testing flag is added in the call_deploy() function.
 """
 
 from pathlib import Path
@@ -28,11 +28,11 @@ def check_project_unchanged(tmp_proj_dir):
     """
 
     stdout, stderr = msp.make_git_call(tmp_proj_dir, "git status --porcelain")
-    assert "?? simple_deploy_logs/" in stdout
+    assert "?? dsd_logs/" in stdout
 
     stdout, stderr = msp.make_git_call(tmp_proj_dir, "git log")
     assert "Removed unneeded dependency management files." in stdout
-    assert "Added simple_deploy to INSTALLED_APPS." in stdout
+    assert "Added django_simple_deploy to INSTALLED_APPS." in stdout
 
 
 # --- Test invalid variations of the `deploy` command ---
@@ -40,8 +40,8 @@ def check_project_unchanged(tmp_proj_dir):
 # DEV: Update this test after requiring `--configuration-only` or `automate-all`
 # def test_bare_call(tmp_project):
 #     """Call deploy with no arguments."""
-#     invalid_sd_command = "python manage.py deploy"
-#     stdout, stderr = msp.call_simple_deploy(tmp_project, invalid_sd_command)
+#     invalid_dsd_command = "python manage.py deploy"
+#     stdout, stderr = msp.call_deploy(tmp_project, invalid_dsd_command)
 
 #     assert "The --platform flag is required;" in stderr
 #     assert "Please re-run the command with a --platform option specified." in stderr
@@ -52,13 +52,13 @@ def check_project_unchanged(tmp_proj_dir):
 # DEV: Update this to reflect an invalid --plugin arg.
 # def test_invalid_platform_call(tmp_project):
 #     """Call deploy with an invalid --platform argument."""
-#     invalid_sd_command = (
+#     invalid_dsd_command = (
 #         "python manage.py deploy --platform unsupported_platform_name"
 #     )
-#     stdout, stderr = msp.call_simple_deploy(tmp_project, invalid_sd_command)
+#     stdout, stderr = msp.call_deploy(tmp_project, invalid_dsd_command)
 
 #     assert (
-#         "SimpleDeployCommandError: Could not find plugin for the platform unsupported_platform_name."
+#         "DSDCommandError: Could not find plugin for the platform unsupported_platform_name."
 #         in stderr
 #     )
 #     check_project_unchanged(tmp_project)
@@ -69,11 +69,11 @@ def check_project_unchanged(tmp_proj_dir):
 #     """Call deploy with an invalid --platform argument,
 #     and `--automate-all`.
 #     """
-#     invalid_sd_command = "python manage.py deploy --platform unsupported_platform_name --automate-all"
-#     stdout, stderr = msp.call_simple_deploy(tmp_project, invalid_sd_command)
+#     invalid_dsd_command = "python manage.py deploy --platform unsupported_platform_name --automate-all"
+#     stdout, stderr = msp.call_deploy(tmp_project, invalid_dsd_command)
 
 #     assert (
-#         "SimpleDeployCommandError: Could not find plugin for the platform unsupported_platform_name."
+#         "DSDCommandError: Could not find plugin for the platform unsupported_platform_name."
 #         in stderr
 #     )
 #     check_project_unchanged(tmp_project)

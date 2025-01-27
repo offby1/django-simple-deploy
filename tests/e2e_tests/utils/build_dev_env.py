@@ -92,12 +92,12 @@ def remove_unneeded_files(proj_dir, pkg_manager):
         (proj_dir / "pyproject.toml").unlink()
 
 
-def add_simple_deploy(tmp_dir):
-    """Add simple_deploy to INSTALLED_APPS in the test project."""
+def add_dsd(tmp_dir):
+    """Add django_simple_deploy to INSTALLED_APPS in the test project."""
     settings_file_path = tmp_dir / "blog/settings.py"
     settings_content = settings_file_path.read_text()
     new_settings_content = settings_content.replace(
-        "# Third party apps.", "# Third party apps.\n    'simple_deploy',"
+        "# Third party apps.", "# Third party apps.\n    'django_simple_deploy',"
     )
     settings_file_path.write_text(new_settings_content)
 
@@ -144,7 +144,7 @@ elif pkg_manager == "pipenv":
     # Activate virtual environment and install dependencies with pipenv
     activate_and_run("pipenv install", project_dir)
 
-# Usually, install the local version of simple_deploy (the version we're developing).
+# Usually, install the local version of dsd (the version we're developing).
 # Note: We don't need an editable install, but a non-editable install is *much* slower.
 #   We may be able to use --cache-dir to address this, but -e is working fine right now.
 # If `--pypi` flag has been passed, install from PyPI.
@@ -159,9 +159,9 @@ elif pkg_manager == "poetry":
     # Use pip to install the local version.
     # We could install the local wheel file using `poetry add`, but then
     #   the lock file won't work on the remote server. We're really testing
-    #   how simple_deploy handles a poetry environment, we're not testing
+    #   how dsd handles a poetry environment, we're not testing
     #   how poetry installs the local package. So this should reliably test
-    #   whether an end user who uses poetry is able to use simple_deploy
+    #   whether an end user who uses poetry is able to use dsd
     #   successfully.
     if target == "pypi":
         activate_and_run("poetry add django-simple-deploy", project_dir)
@@ -193,7 +193,7 @@ elif pkg_manager == "pipenv":
         activate_and_run("pipenv lock", project_dir)
 
 # Make an initial git commit, so we can reset the project every time we want
-#   to run a different simple_deploy command. This is much more efficient than
+#   to run a different version of the deploy command. This is much more efficient than
 #   tearing down the whole sample project and rebuilding it from scratch.
 # We use a git tag to do the reset, instead of trying to capture the initial hash.
 git_exe = "git"
@@ -204,10 +204,10 @@ make_sp_call("git add .")
 make_sp_call("git commit -am 'Initial commit.'")
 make_sp_call("git tag -am '' 'INITIAL_STATE'")
 
-# Add simple_deploy to INSTALLED_APPS.
-add_simple_deploy(project_dir)
+# Add django_simple_deploy to INSTALLED_APPS.
+add_dsd(project_dir)
 
-# Make sure we have a clean status before calling simple_deploy.
+# Make sure we have a clean status before calling the deploy command.
 make_sp_call("git commit -am 'Added simple_deploy to INSTALLED_APPS.'")
 make_sp_call("git tag -am '' 'ADDED_SD'")
 

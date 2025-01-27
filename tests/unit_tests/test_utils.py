@@ -1,6 +1,6 @@
-"""Tests for simple_deploy/management/commands/utils.py.
+"""Tests for django_simple_deploy/management/commands/utils.py.
 
-Note: May need to rethink handling of sd_config, if tests start to affect each other.
+Note: May need to rethink handling of dsd_config, if tests start to affect each other.
 """
 
 from pathlib import Path
@@ -8,11 +8,11 @@ import filecmp
 import sys
 import subprocess
 
-from simple_deploy.management.commands.utils import sd_utils
-from simple_deploy.management.commands.utils import plugin_utils
-from simple_deploy.management.commands.utils.plugin_utils import sd_config
-from simple_deploy.management.commands.utils.command_errors import (
-    SimpleDeployCommandError,
+from django_simple_deploy.management.commands.utils import dsd_utils
+from django_simple_deploy.management.commands.utils import plugin_utils
+from django_simple_deploy.management.commands.utils.plugin_utils import dsd_config
+from django_simple_deploy.management.commands.utils.command_errors import (
+    DSDCommandError,
 )
 
 import pytest
@@ -65,7 +65,7 @@ def test_get_plugin_name_default_plugins():
         "dsd_flyio",
     ]
 
-    plugin_name = sd_utils._get_plugin_name_from_packages(available_packages)
+    plugin_name = dsd_utils._get_plugin_name_from_packages(available_packages)
     assert plugin_name == "dsd_flyio"
 
 
@@ -77,7 +77,7 @@ def test_get_plugin_name_third_party_plugin():
         "django-bootstrap5",
     ]
 
-    plugin_name = sd_utils._get_plugin_name_from_packages(available_packages)
+    plugin_name = dsd_utils._get_plugin_name_from_packages(available_packages)
     assert plugin_name == "dsd_flyio_thirdparty"
 
 
@@ -88,8 +88,8 @@ def test_get_plugin_name_no_plugins():
         "django-bootstrap5",
     ]
 
-    with pytest.raises(SimpleDeployCommandError):
-        plugin_name = sd_utils._get_plugin_name_from_packages(available_packages)
+    with pytest.raises(DSDCommandError):
+        plugin_name = dsd_utils._get_plugin_name_from_packages(available_packages)
 
 
 def test_get_plugin_name_too_many_plugins():
@@ -105,8 +105,8 @@ def test_get_plugin_name_too_many_plugins():
         "django-bootstrap5",
     ]
 
-    with pytest.raises(SimpleDeployCommandError):
-        plugin_name = sd_utils._get_plugin_name_from_packages(available_packages)
+    with pytest.raises(DSDCommandError):
+        plugin_name = dsd_utils._get_plugin_name_from_packages(available_packages)
 
 
 # --- Parsing requirements ---
@@ -114,7 +114,7 @@ def test_get_plugin_name_too_many_plugins():
 
 def test_parse_req_txt():
     path = Path(__file__).parent / "resources" / "requirements.txt"
-    requirements = sd_utils.parse_req_txt(path)
+    requirements = dsd_utils.parse_req_txt(path)
 
     assert requirements == [
         "asgiref",
@@ -133,7 +133,7 @@ def test_parse_req_txt():
 
 def test_parse_pipfile():
     path = Path(__file__).parent / "resources" / "Pipfile"
-    requirements = sd_utils.parse_pipfile(path)
+    requirements = dsd_utils.parse_pipfile(path)
 
     packages = ["django", "django-bootstrap5", "requests"]
     assert all([pkg in requirements for pkg in packages])
@@ -141,7 +141,7 @@ def test_parse_pipfile():
 
 def test_parse_pyproject_toml():
     path = Path(__file__).parent / "resources" / "pyproject.toml"
-    requirements = sd_utils.parse_pyproject_toml(path)
+    requirements = dsd_utils.parse_pyproject_toml(path)
 
     assert requirements == [
         "Django",
@@ -208,13 +208,13 @@ def test_add_pipenv_pkg(tmp_path):
     assert filecmp.cmp(tmp_pipfile, ref_file)
 
 
-# --- Tests for functions that require sd_config ---
+# --- Tests for functions that require dsd_config ---
 
 
 def test_add_file(tmp_path):
     """Test utility for adding a file."""
-    sd_config.unit_testing = "True"
-    sd_config.stdout = sys.stdout
+    dsd_config.unit_testing = "True"
+    dsd_config.stdout = sys.stdout
 
     contents = "Sample file contents.\n"
     path = tmp_path / "test_add_file.txt"

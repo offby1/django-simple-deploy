@@ -25,7 +25,7 @@ def execute_quick_command(tmp_project, cmd):
 
 
 def test_with_existing_dockerfile(tmp_project):
-    """Call simple_deploy with an existing Dockerfile.
+    """Call deploy with an existing Dockerfile.
 
     The --unit-testing flag should get confirmation, but we should see a relevant
     message in the log.
@@ -45,8 +45,8 @@ def test_with_existing_dockerfile(tmp_project):
     cmd = "git commit -am 'Added dummy dockerfile.'"
     output_str = execute_quick_command(tmp_project, cmd).stdout.decode()
 
-    sd_command = "python manage.py deploy"
-    stdout, stderr = msp.call_simple_deploy(tmp_project, sd_command)
+    dsd_command = "python manage.py deploy"
+    stdout, stderr = msp.call_deploy(tmp_project, dsd_command)
 
     assert (
         "The file Dockerfile already exists. Is it okay to replace this file?" in stdout

@@ -15,9 +15,9 @@ from textwrap import dedent
 
 import pytest
 
-from simple_deploy.management.commands.utils import sd_utils
-from simple_deploy.management.commands.utils.command_errors import (
-    SimpleDeployCommandError,
+from django_simple_deploy.management.commands.utils import dsd_utils
+from django_simple_deploy.management.commands.utils.command_errors import (
+    DSDCommandError,
 )
 
 
@@ -50,7 +50,7 @@ def check_reference_file(tmp_proj_dir, filepath, plugin_name="", reference_filen
     else:
         filename = Path(filepath).name
 
-    # Root directory of local simple_deploy project.
+    # Root directory of local django-simple-deploy project.
     sd_root_dir = Path(__file__).parents[3]
     print("sd_root_dir:", sd_root_dir)
 
@@ -77,8 +77,8 @@ def check_plugin_available(config):
 
     # No plugin specified; make sure one is installed.
     try:
-        sd_utils.get_plugin_name()
-    except SimpleDeployCommandError:
+        dsd_utils.get_plugin_name()
+    except DSDCommandError:
         msg = "\n*** No plugins installed. Skipping integration tests. ***"
         print(msg)
         pytest.skip()
