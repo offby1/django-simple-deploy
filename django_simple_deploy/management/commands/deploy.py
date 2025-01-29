@@ -29,6 +29,7 @@ import sys, os, platform, re, subprocess, logging, shlex
 from datetime import datetime
 from pathlib import Path
 from importlib import import_module
+from importlib.metadata import version
 
 from django.core.management.base import BaseCommand
 from django.conf import settings
@@ -119,6 +120,9 @@ class Command(BaseCommand):
             self._log_cli_args(options)
 
         self._validate_command()
+
+        # Get installed version.
+        dsd_config.version = version("django-simple-deploy")
 
         # Import the platform-specific plugin module. This performs some validation, so
         # it's best to call this before modifying project in any way.
@@ -494,7 +498,8 @@ class Command(BaseCommand):
         """
         msg = "\nLooking for django-simple-deploy in requirements..."
         plugin_utils.write_output(msg)
-        plugin_utils.add_package("django-simple-deploy")
+        version_string = f"=={dsd_config.version}"
+        plugin_utils.add_package("django-simple-deploy", version=version_string)
 
     def _validate_plugin(self, pm):
         """Check that all required hooks are implemeted by plugin.
