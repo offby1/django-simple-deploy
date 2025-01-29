@@ -6,6 +6,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 0.9 - Simplified usage
 ---
 
+### 0.9.4
+
+#### External changes
+
+- When adding `django-simple-deploy` as a dependency of the user's project, specifies the currently-installed version of `django-simple-deploy`. This makes sure the version installed on the host platform matches the version the user has installed locally. This makes testing more reliable, and should be the behavior that users would expect.
+
+#### Internal changes
+
+- `plugin_utils.check_reference_file()` accepts an absolute path to a reference file, and a context dictionary for dynamic reference files.
+- Provides a fixture, `dsd_version`, for getting the version of `django-simple-deploy` that's being used during testing.
+
 ### 0.9.3
 
 #### External changes

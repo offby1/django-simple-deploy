@@ -170,6 +170,7 @@ def pkg_manager(request):
     """
     return request.node.callspec.params.get("reset_test_project")
 
+
 @pytest.fixture(scope="session")
 def dsd_version():
     """Get the version of django-simple-deploy that's being tested.
