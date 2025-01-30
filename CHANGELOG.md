@@ -6,6 +6,16 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 0.9 - Simplified usage
 ---
 
+### 0.9.5 (unreleased)
+
+#### External changes
+
+- Updated main image and name of log directory in main README.
+
+#### Internal changes
+
+- NA
+
 ### 0.9.4
 
 #### External changes
