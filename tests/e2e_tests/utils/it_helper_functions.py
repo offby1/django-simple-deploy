@@ -92,10 +92,14 @@ def check_local_app_functionality(python_cmd):
     # Start the runserver process.
     # On Linux, runserver will spawn child processes, which need to be handled as a group.
     if sys.platform == "linux":
-        run_server = subprocess.Popen(f"{python_cmd} manage.py runserver 8008", shell=True, preexec_fn=os.setpgrp)
+        run_server = subprocess.Popen(
+            f"{python_cmd} manage.py runserver 8008", shell=True, preexec_fn=os.setpgrp
+        )
     else:
-        run_server = subprocess.Popen(f"{python_cmd} manage.py runserver 8008", shell=True)
-    
+        run_server = subprocess.Popen(
+            f"{python_cmd} manage.py runserver 8008", shell=True
+        )
+
     time.sleep(1)
 
     # Test the local project using the runserver process.
@@ -103,7 +107,7 @@ def check_local_app_functionality(python_cmd):
         f"{python_cmd} test_deployed_app_functionality.py --url http://localhost:8008/",
         capture_output=True,
     ).stdout.decode()
-    
+
     # Kill the runserver process.
     if sys.platform == "linux":
         os.killpg(run_server.pid, signal.SIGKILL)

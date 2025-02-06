@@ -16,6 +16,8 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 - Uses a cross-platform approach to identifying which plugin is being tested.
 - Added windows-compatible dependencies to vendor/ for integration tests. All tests pass on Windows.
+- Updated core tests for Linux as well.
+- Implements CI testing for Python 3.12 on macOS, Linux, and Windows.
 
 ### 0.9.4
 
