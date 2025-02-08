@@ -20,6 +20,9 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 - Implements CI testing for Python 3.12 on macOS, Linux, and Windows.
 - Updated requirements.txt, for dev work.
 - Run CI testing on direct push to main.
+- Add dependabot config.
+  - Daily for main requirements.
+  - Monthly for sample_project and tests/, until tests refactored to pull version from sample_project/.
 
 ### 0.9.4
 
