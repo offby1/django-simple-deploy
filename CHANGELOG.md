@@ -18,6 +18,8 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 - Added windows-compatible dependencies to vendor/ for integration tests. All tests pass on Windows.
 - Updated core tests for Linux as well.
 - Implements CI testing for Python 3.12 on macOS, Linux, and Windows.
+- Updated requirements.txt, for dev work.
+- Run CI testing on direct push to main.
 
 ### 0.9.4
 
