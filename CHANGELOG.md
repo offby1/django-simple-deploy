@@ -12,7 +12,7 @@ This release will have a stable public interface for end users, and for plugin d
 
 #### External changes
 
-- NA
+- Added docs/announcements section, with 1.0 release announcement.
 
 #### Internal changes
 
