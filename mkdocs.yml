@@ -44,6 +44,7 @@ nav:
     - 'Coding Guide': 'contributing/coding_guide.md'
     - 'Architecture Notes': 'contributing/architecture_notes.md'
     - 'Parking Lot': 'contributing/parking_lot.md'
+    - 'Code of Conduct': 'contributing/code_of_conduct.md'
   - 'Plugins':
     - 'plugins/index.md'
     - 'plugins/plugin_utils.md'
