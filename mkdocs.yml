@@ -23,7 +23,7 @@ markdown_extensions:
   - footnotes
 
 plugins:
-  - mkdocstrings-python
+  - mkdocstrings
 
 nav:
   - 'Introduction': 'index.md'
