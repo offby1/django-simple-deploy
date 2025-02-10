@@ -10,7 +10,7 @@ hide:
 
 *2/10/2025*
 
-## `django-simple-deploy` 1.0.0 is out
+## `django-simple-deploy` 1.0.0 is out!
 
 It's been a long time coming, so I'm happy to announce that django-simple-deploy 1.0 has just been released. 1.0.0 is just a number, so what does it mean for this project in particular? It really boils down to two things: reliability, and stability.
 
