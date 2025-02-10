@@ -8,6 +8,17 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 This release will have a stable public interface for end users, and for plugin developers as well. The project will continue to be refined internally and may gain some new features, but will have overall stability as a high priority.
 
+### (Unreleased)
+
+#### External changes
+
+- NA
+
+#### Internal changes
+
+- Update docs/requirements.txt, and readthedocs.yml to fix issue when building docs.
+
+
 ### 1.0.0 - Stable release
 
 #### External changes
