@@ -20,11 +20,10 @@ markdown_extensions:
   - def_list
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
   - footnotes
 
 plugins:
-- mkdocstrings
+  - mkdocstrings
 
 nav:
   - 'Introduction': 'index.md'
