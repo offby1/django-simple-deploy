@@ -23,3 +23,11 @@ It was an honor to be the guest on episode 500, that's a fantastic milestone for
 [Your first deployment shouldn't be so hard!]((https://www.youtube.com/watch?v=l17ZZrQnK4c))
 
 This was the first public demonstration of `django-simple-deploy`.
+
+## Django Chat
+
+2/16/2022
+
+[Django Deployments](https://djangochat.com/episodes/django-deployments-eric-matthes)
+
+This was the first public discussion of the project.
