@@ -118,7 +118,6 @@ if args.location:
     project_dir = Path(args.location) / f"dsd-dev-project_{random_id}"
 else:
     project_dir = sd_root_dir.parent / f"dsd-dev-project_{random_id}"
-breakpoint()
 
 # Copy sample project to project dir.
 sample_project_dir = sd_root_dir / "sample_project/blog_project"
