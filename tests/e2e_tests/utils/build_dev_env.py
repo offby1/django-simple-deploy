@@ -154,6 +154,10 @@ elif pkg_manager == "pipenv":
     # Activate virtual environment and install dependencies with pipenv
     activate_and_run("pipenv install", project_dir)
 
+# Migrate.
+cmd = "python manage.py migrate"
+activate_and_run(cmd, project_dir)
+
 # Usually, install the local version of dsd (the version we're developing).
 # Note: We don't need an editable install, but a non-editable install is *much* slower.
 #   We may be able to use --cache-dir to address this, but -e is working fine right now.
