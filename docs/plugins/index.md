@@ -10,7 +10,7 @@ Plugins are critical to the functioning of this project. Plugins don't just exte
 
 ## Developing a new plugin
 
-If you want to write a plugin, see the notes in the [dsd-plugin-template](https://github.com/django-simple-deploy/dsd-plugin-template) repository. You can download (not clone) that repo, and you'll have a working plugin that you can adapt to the platform you're focusing on. If you're interested in developing a new plugin and want some help, please feel free to open an issue.
+If you want to write a plugin, see the notes in the [dsd-plugin-generator](https://github.com/django-simple-deploy/dsd-plugin-generator) repository. When you run the plugin generator, you'll have a working plugin you can adapt to the platform you're focusing on. If you're interested in developing a new plugin and want some help, please feel free to open an issue.
 
 
 ## Testing plugins
