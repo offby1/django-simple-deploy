@@ -8,16 +8,14 @@ For inspiration and motivation, see [Keep a CHANGELOG](https://keepachangelog.co
 
 This release will have a stable public interface for end users, and for plugin developers as well. The project will continue to be refined internally and may gain some new features, but will have overall stability as a high priority.
 
-### (Unreleased)
+### 1.1.0
 
 #### External changes
 
 - Added docs/announcements section, with 1.0 release announcement.
-
-#### Internal changes
-
-- Update docs/requirements.txt, and readthedocs.yml to fix issue when building docs.
-
+- Supports Wagtail projects.
+  - Wraps `settings.BASE_DIR` in `Path()`, because paths in Wagtail settings file are still strings.
+  - New `_get_settings_path()` method, which finds Wagtails `project_name/settings/production.py` settings file.
 
 ### 1.0.0 - Stable release
 
