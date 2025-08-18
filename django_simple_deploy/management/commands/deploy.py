@@ -207,7 +207,8 @@ class Command(BaseCommand):
         Returns:
             bool: True if created directory, False if already one present.
         """
-        self.log_dir_path = settings.BASE_DIR / "dsd_logs"
+        # We're primarily calling Path() because wagtail still uses string paths!
+        self.log_dir_path = Path(settings.BASE_DIR) / "dsd_logs"
         if not self.log_dir_path.exists():
             self.log_dir_path.mkdir()
             return True
@@ -283,7 +284,7 @@ class Command(BaseCommand):
         dsd_config.local_project_name = settings.ROOT_URLCONF.replace(".urls", "")
         plugin_utils.log_info(f"Local project name: {dsd_config.local_project_name}")
 
-        dsd_config.project_root = settings.BASE_DIR
+        dsd_config.project_root = Path(settings.BASE_DIR)
         plugin_utils.log_info(f"Project root: {dsd_config.project_root}")
 
         # Find .git location, and make sure there's a clean status.
@@ -294,9 +295,7 @@ class Command(BaseCommand):
         if dsd_config.log_output:
             self._ignore_sd_logs()
 
-        dsd_config.settings_path = (
-            dsd_config.project_root / dsd_config.local_project_name / "settings.py"
-        )
+        dsd_config.settings_path = self._get_settings_path()
 
         # Find out which package manager is being used: req_txt, poetry, or pipenv
         dsd_config.pkg_manager = self._get_dep_man_approach()
@@ -410,6 +409,25 @@ class Command(BaseCommand):
                 contents += f"\n{ignore_msg}"
                 gitignore_path.write_text(contents)
                 plugin_utils.write_output("Added dsd_logs/ to .gitignore")
+
+    def _get_settings_path(self):
+        """Find the settings file that we should modify.
+
+        This is usually project_name/settings.py.
+        For Wagtail and projects with a similar structure, this will be
+          project_name/settings/production.py.
+        """
+        standard_path = dsd_config.project_root / dsd_config.local_project_name / "settings.py"
+        if standard_path.exists():
+            return standard_path
+
+        wagtail_path = dsd_config.project_root / dsd_config.local_project_name / "settings" / "production.py"
+        if wagtail_path.exists():
+            return wagtail_path
+
+        # Can't identify a settings path, so we need to bail.
+        error_msg = f"Couldn't find a settings file. Tried {standard_path.as_posix()} and {wagtail_path.as_posix()}"
+        raise DSDCommandError(error_msg)
 
     def _get_dep_man_approach(self):
         """Identify which dependency management approach the project uses.
