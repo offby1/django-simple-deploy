@@ -38,6 +38,7 @@ This page summarizes the strengths and potential drawbacks of each platform.
 
     * Offers a [public forum](https://community.fly.io) for support, and allows you to search for issues (and resolutions) that others have had.
     * The cheapest plan is currently about $2/month, but that machine only has 256MB of RAM. A 1GB is currently less than $6/month.
+    * If your total invoice on a personal account is less than $5 for any given month, you won't be billed for that month. It's not a credit though; if your invoice is over $5 you're responsible for the full amount owed.
     * The documentation [states](https://fly.io/docs/about/billing/#if-you-dont-have-a-credit-card) that you can use a prepaid card to buy credits. The minimum purchase of credits is $25.
 
     **Issues**
