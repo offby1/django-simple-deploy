@@ -54,6 +54,7 @@ This page summarizes the strengths and potential drawbacks of each platform.
     * [Docs home page](https://fly.io/docs/)
     * [CLI installation](https://fly.io/docs/hands-on/install-flyctl/)
     * [CLI reference](https://fly.io/docs/flyctl/)
+    * [Fly.io Status page](https://status.flyio.net)
 
     **Using `django-simple-deploy` with Fly.io**
 
@@ -81,6 +82,7 @@ This page summarizes the strengths and potential drawbacks of each platform.
     * [Pricing](https://platform.sh/pricing/)
     * [Docs home page](https://docs.platform.sh)
     * [CLI installation](https://docs.platform.sh/administration/cli.html)
+    * [Platform.sh Status page](https://status.platform.sh)
 
     **Using `django-simple-deploy` with Platform.sh**
 
@@ -113,6 +115,7 @@ This page summarizes the strengths and potential drawbacks of each platform.
     * [Python on Heroku](https://devcenter.heroku.com/categories/python-support)
     * [Getting Started on Heroku with Python](https://devcenter.heroku.com/articles/getting-started-with-python?singlepage=true)
     * [Working with Django (on Heroku)](https://devcenter.heroku.com/categories/working-with-django)
+    * [Heroku Status page](https://status.heroku.com)
 
     **Using `django-simple-deploy` with Heroku**
 
