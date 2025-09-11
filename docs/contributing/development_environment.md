@@ -112,7 +112,7 @@ In the root directory of the test project, build out the environment and start t
     $ python -m venv b_env
     $ source b_env/bin/activate
     $ pip install --upgrade pip
-    $ pip install -r requiremnents.txt
+    $ pip install -r requirements.txt
     $ python manage.py migrate
     $ python manage.py runserver
     ```
