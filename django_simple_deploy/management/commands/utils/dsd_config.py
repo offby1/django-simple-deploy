@@ -77,3 +77,7 @@ class DSDConfig:
         if self.stdout is None:
             msg = "Failed to access stdout."
             raise DSDCommandError(msg)
+
+    def __setattr__(self, name, value):
+        print(f"Setting {name=} to {value=} on {self=}")
+        return object.__setattr__(self, name, value)
