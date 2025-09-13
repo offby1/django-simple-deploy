@@ -7,6 +7,7 @@ import logging
 import re
 import subprocess
 import shlex
+import sys
 import toml
 from pathlib import Path
 
@@ -312,7 +313,7 @@ def write_output(output, write_to_console=True, skip_logging=False):
     """
     output_str = get_string_from_output(output)
 
-    if write_to_console:
+    if write_to_console and not logs_to_console():
         dsd_config.stdout.write(output_str)
 
     if not skip_logging:
@@ -537,3 +538,22 @@ def add_req_txt_pkg(req_txt_path, package, version):
     contents = req_txt_path.read_text()
     pkg_string = f"\n{package + version}"
     req_txt_path.write_text(contents + pkg_string)
+
+def logs_to_console(logger=None):
+    """Check if logging is configured to stream to stdout or stderr."""
+    if not logger:
+        logger = logging.getLogger(__name__)
+
+    for handler in logger.handlers:
+        if not isinstance(handler, logging.StreamHandler):
+            continue
+
+        if handler.stream in (sys.stdout, sys.stderr):
+            return True
+
+    if logger.propagate and logger.parent:
+        return logs_to_console(logger.parent)
+
+    # Logging is not configured to stream to stdout or stderr.
+    return False
+    
